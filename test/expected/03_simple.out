@@ -1,13 +1,10 @@
 BEGIN;
 CREATE TABLE tenk1 (
-    INT thousand,
-    INT hundred
+    thousand INT,
+    hundred INT
 );
-
 LOAD 'geqo_extension';
-
 SET geqo_threshold = 2;
-
 SELECT * FROM
 	tenk1 t1,
 	tenk1 t2,
@@ -15,5 +12,8 @@ SELECT * FROM
 WHERE
 	t1.thousand = t3.thousand AND
 	t3.hundred = t2.hundred;
+ thousand | hundred | thousand | hundred | thousand | hundred 
+----------+---------+----------+---------+----------+---------
+(0 rows)
 
 ROLLBACK;

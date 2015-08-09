@@ -1,1 +1,1 @@
-load 'geqo_extension';
+LOAD 'geqo_extension';
