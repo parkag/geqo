@@ -1,24 +1,19 @@
-load 'saio';
-set saio_seed to 0.5;
-set enable_mergejoin to false;
-set enable_nestloop to false;
-explain (costs off) select * from
+BEGIN;
+CREATE TABLE tenk1 (
+    INT thousand,
+    INT hundred
+);
+
+LOAD 'geqo_extension';
+
+SET geqo_threshold = 2;
+
+SELECT * FROM
 	tenk1 t1,
 	tenk1 t2,
 	tenk1 t3
-where
-	t1.thousand = t3.thousand and
+WHERE
+	t1.thousand = t3.thousand AND
 	t3.hundred = t2.hundred;
-                   QUERY PLAN                   
-------------------------------------------------
- Hash Join
-   Hash Cond: (t3.hundred = t2.hundred)
-   ->  Hash Join
-         Hash Cond: (t1.thousand = t3.thousand)
-         ->  Seq Scan on tenk1 t1
-         ->  Hash
-               ->  Seq Scan on tenk1 t3
-   ->  Hash
-         ->  Seq Scan on tenk1 t2
-(9 rows)
 
+ROLLBACK;

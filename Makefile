@@ -19,34 +19,11 @@ OBJS =	src/geqo.o src/geqo_copy.o src/geqo_eval.o src/geqo_main.o src/geqo_misc.
 # make sure
 all: all-lib
 
-# check for DTrace support
-#ifeq (,$(findstring --enable-dtrace,$(shell $(PG_CONFIG) --configure)))
-#enable_dtrace = no
-#else
-#enable_dtrace = yes
-#endif
 
-#ifeq ($(enable_dtrace), yes)
-#OBJS += src/saio_probes.o
-#endif
+coverage:
+	lcov -d . -c -o lcov.info
+	genhtml --show-details --legend --output-directory=coverage --title=PostgreSQL --num-spaces=4 --prefix=./src/ `find . -name lcov.info -print`
 
-#src/saio.o: src/saio_probes.h
-
-#src/saio_probes.o: src/saio_probes.d
-#	$(DTRACE) -C -G -s $< -o $@
-
-#ifeq ($(enable_dtrace), no)
-#src/saio_probes.h: src/Gen_dummy_probes.sed
-#endif
-
-#src/saio_probes.h: src/saio_probes.d
-#ifeq ($(enable_dtrace), yes)
-#	$(DTRACE) -C -h -s $< -o $@.tmp
-#	sed -e 's/SAIO_/TRACE_SAIO_/g' $@.tmp >$@
-#	rm $@.tmp
-#else
-#	sed -f src/Gen_dummy_probes.sed $< >$@
-#endif
 
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)

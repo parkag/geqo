@@ -35,7 +35,6 @@ double
 geqo_rand(PlannerInfo *root)
 {
 	Geqo2PrivateData *private = (Geqo2PrivateData *) root->join_search_private;
-	puts("CHOOSING A RANDOM NUMBER\n");
 
 	return pg_erand48(private->random_state);
 }
